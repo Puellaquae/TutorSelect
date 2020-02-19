@@ -79,13 +79,13 @@ namespace TutorSever
         public static void Init()
         {
             _tokenGenKey = GetRandomString(16);
-            DateBase.Init();
+            DataBase.Init();
             _inited = true;
         }
         //private static Dictionary<string, string> Tokens = new Dictionary<string, string>();
         public static string GetToken(string userName,string hmac,string type)
         {
-            if (DateBase.PassWordCheck(userName, hmac, type))
+            if (DataBase.PassWordCheck(userName, hmac, type))
             {
                 string token = TokenGen(userName);
                 //Tokens.Add(token, UserName);
@@ -118,7 +118,7 @@ namespace TutorSever
         }
         public static bool CheckToken(string userName,string token)
         {
-            if (DateBase.HasAccount(userName))
+            if (DataBase.HasAccount(userName))
             {
                 switch (token.Length % 4)
                 {

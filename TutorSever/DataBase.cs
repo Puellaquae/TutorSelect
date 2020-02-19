@@ -2,7 +2,7 @@
 
 namespace TutorSever
 {
-    internal class DateBase
+    internal class DataBase
     {
         private class Account
         {
@@ -38,7 +38,6 @@ namespace TutorSever
         {
             return Accounts.ContainsKey(userName);
         }
-
         public static bool UpdatePassword(string username, string newpsw)
         {
             if (Accounts[username].HMAC != newpsw)
@@ -51,6 +50,11 @@ namespace TutorSever
             {
                 return false;
             }
+        }
+
+        public static string GetType(string username)
+        {
+            return Accounts[username].Type;
         }
     }
 }

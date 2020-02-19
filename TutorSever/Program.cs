@@ -29,7 +29,7 @@ namespace TutorSever
                 string token = query["token"];
                 if(Authority.CheckToken(user, token))
                 {
-                    return DateBase.FirstLoginCheck(user) ? new ResponseMessage("true") : new ResponseMessage("false");
+                    return DataBase.FirstLoginCheck(user) ? new ResponseMessage("true") : new ResponseMessage("false");
                 }
                 else
                 {
@@ -52,7 +52,7 @@ namespace TutorSever
                 string newpsw = query["newpsw"];
                 if (Authority.CheckToken(user, token))
                 {
-                    return DateBase.UpdatePassword(user,newpsw) ? new ResponseMessage("true") : new ResponseMessage("false");
+                    return DataBase.UpdatePassword(user,newpsw) ? new ResponseMessage("true") : new ResponseMessage("false");
                 }
                 else
                 {
@@ -67,7 +67,31 @@ namespace TutorSever
 
         private static ResponseMessage Login(RequsetMessage requset)
         {
-            throw new NotImplementedException();
+            Dictionary<string, string> query = requset.Querys;
+            if (query.ContainsKey("user") && query.ContainsKey("token"))
+            {
+                string token = query["token"];
+                string username = query["username"];
+                if (Authority.CheckToken(username, token))
+                {
+                    string type = DataBase.GetType(username);
+                    return type switch
+                    {
+                        "student" => ResponseMessage.TryGetFileResponse("student/index.html"),
+                        "teacher" => ResponseMessage.TryGetFileResponse("teacher/index.html"),
+                        "admin" => ResponseMessage.TryGetFileResponse("admin/index/html"),
+                        _ => new ResponseMessage("UNKOWN TYPE", 406)
+                    };
+                }
+                else
+                {
+                    return new ResponseMessage(403);
+                }
+            }
+            else
+            {
+                return new ResponseMessage(400);
+            }
         }
 
         private static void Main()
