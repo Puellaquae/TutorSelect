@@ -98,6 +98,8 @@ var app = new Vue({
                         ).then(X => {
                             if (X != 'false') {
                                 this.login.token = X;
+                                window.sessionStorage.setItem('token',X);
+                                window.sessionStorage.setItem('user',this.login.username);
                                 if (this.login.usergroup == 'student') {
                                     fetch('FirstLogin?user=' + this.login.username + '&token=' + this.login.token)
                                         .then(X => X.text())

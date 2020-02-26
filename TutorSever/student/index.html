@@ -1,33 +1,94 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
-    <title>Document</title>
+    <title>学生个人信息</title>
+    <script type="text/javascript">
+        load();
+
+        function GetQueryString(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null) return unescape(r[2]);
+            return null;
+        }
+
+        function load() {
+            var _user = null;
+            if (!sessionStorage.getItem('token')) {
+                sessionStorage.setItem('token', GetQueryString('token'));
+            }
+            if (!sessionStorage.getItem('user')) {
+                sessionStorage.setItem('user', GetQueryString('user'));
+            } else {
+                _user = sessionStorage.getItem('user');
+            }
+            window.history.pushState(null, null, 'student/' + _user);
+        }
+    </script>
+    <link rel="stylesheet" href="../student/stu.css" />
 </head>
+
 <body>
-    <div id="app">
-        <el-container>
-            <el-header>
-                <el-menu mode="horizontal">
-                    <el-menu-item>
-                        <span>个人信息</span>
-                    </el-menu-item>
-                    <el-menu-item>
-                        <span>导师信息</span>
-                    </el-menu-item>
-                    <el-menu-item>
-                        <span>公示信息</span>
-                    </el-menu-item>
-                </el-menu>
-            </el-header>
-            <el-main>Main</el-main>
-        </el-container>
-        </el-container>
+    <div id="choose" class="choose" style="display: none;">
+        <div>
+            <p>选择:</p>
+            <button onclick="choose('本科导师')">本科导师</button>
+            <button onclick="choose('毕业设计导师')">毕业设计导师</button>
+        </div>
+    </div>
+    <div id="app" class="container">
+        <div class="sinf">
+            <div class="name">
+                <label>姓名:</label>
+                <input v-model="inf.name" onchange="change()">
+            </div>
+            <div class="id">
+                <label>学号:</label>
+                <input v-model="inf.id" onchange="change()">
+            </div>
+            <div class="collage">
+                <label>学院:</label>
+                <input v-model="inf.college" onchange="change()">
+            </div>
+            <div class="major">
+                <label>专业:</label>
+                <input v-model="inf.major" onchange="change()">
+            </div>
+            <div class="tutorchoose">
+                <label>选择:</label>
+                <input v-model="inf.choose" readonly onclick="chooseTutor()" onchange="change()">
+            </div>
+        </div>
+        <div class="pic">
+            <image>照片</image>
+        </div>
+        <div class="intro">
+            <label>个人介绍:</label>
+            <textarea v-model="inf.selfintro" onchange="change()"></textarea>
+        </div>
+        <button id="submitbtn" class="submit" onclick="infCheck()">
+            确认无误
+        </button>
+    </div>
+    <div id="tutor" style="display: none;">
+        <div class="tutors">
+            <div v-for="t in tutors" class="tutor" onclick="Add(this)">
+                <div>姓名：{{t.name}}</div>
+                <div>学院：{{t.college}}</div>
+                <div>研究领域：{{t.field}}</div>
+                <div>职位：{{t.position}}</div>
+                <div>学术成就：
+                    {{t.achievement}}</div>
+                <div>个人介绍：
+                    {{t.intro}}</div>
+            </div>
+        </div>
     </div>
 </body>
 <script src="../js/vue.js"></script>
-<script src="https://unpkg.com/element-ui/lib/index.js"></script>
-<script src="stu.js"></script>
+<script src="../student/stu.js"></script>
+
 </html>
