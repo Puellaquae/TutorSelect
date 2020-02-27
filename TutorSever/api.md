@@ -1,4 +1,4 @@
-# 登陆部分API
+# API说明
 
 ## Auth
 
@@ -12,7 +12,7 @@ __HMAC__ : 密钥散列消息认证码
 若账号密码正确返回一个 __Token__
 若登录不正确返回 __false__
 
-## FirstLogin
+## IsFirstLogin
 
 调用方法:
 __GET__ : FirstLogin?user={UserName}&token={Token}
@@ -41,8 +41,18 @@ __GET__ : Login?user={username}&token={Token}
 返回结果:
 Token验证通过后返回相应页面，否则返回 __403 Forbidden__
 
-## GetInf
+## GetInformation
 
 调用方法:
-__GET__ : GetInf?user={UserName}&token={Token}
+__GET__ : Inf?user={UserName}&token={Token}
 
+## UpdateInformation
+
+## GetTutorInformation
+
+调用方法:
+__GET__ : TutorInf?user={UserName}&token={Token}&type={TuturType}
+
+## UploadPic
+
+## DownloadPic

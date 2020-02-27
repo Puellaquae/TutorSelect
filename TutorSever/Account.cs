@@ -1,4 +1,6 @@
 ﻿
+using Microsoft.VisualBasic;
+
 namespace TutorSever
 {
     public interface IAccount
@@ -20,30 +22,50 @@ namespace TutorSever
         public string College { get; set; }
         public string SelfIntroduction { get; set; }
         public string Type => "student";
-        public string TutorType = "";
+        public string TutorType;
+        public string FirstTutor { get; set; }
+        public string SecondTutor { get; set; }
         public bool IsFirstLogin { get; set; }
+
         public Student(string userName, string hmac)
         {
             UserName = userName;
             HMAC = hmac;
             IsFirstLogin = true;
         }
+
         public string GetInforamtion()
         {
-            return $"{{\"name\":{RealName},\"id\":{ID},\"major\":{Major},\"college\":{College},\"selfintro\":{SelfIntroduction},\"choose\":{TutorType}}}";
+            return $"{{\"name\":\"{RealName}\"," +
+                   $"\"id\":\"{ID}\"," +
+                   $"\"major\":\"{Major}\"," +
+                   $"\"college\":\"{College}\"," +
+                   $"\"selfintro\":\"{SelfIntroduction}\"," +
+                   $"\"choose\":\"{TutorType}\"," +
+                   $"\"firsttutor\":\"{FirstTutor}\"," +
+                   $"\"secondtutor\":\"{SecondTutor}\"}}";
         }
     }
+
     public class Teacher : IAccount
     {
         public string UserName { get; set; }
         public string RealName { get; set; }
+        public string ID { get; set; }
         public string Posititon { get; set; }
         public string College { get; set; }
+
+        /// <summary>
+        /// Could be "under", "project" or "all"
+        /// </summary>
+        public string Group { get; set; }
+
         public string Field { get; set; }
         public string SelfIntroduction { get; set; }
         public string Achievement { get; set; }
         public string HMAC { get; set; }
         public string Type => "teacher";
+
         public Teacher(string userName, string hmac)
         {
             UserName = userName;
@@ -52,7 +74,13 @@ namespace TutorSever
 
         public string GetInforamtion()
         {
-            return $"{{\"name\":{RealName},\"posititon\":{Posititon},\"college\":{College},\"field\":{Field},\"achievement\":{Achievement},\"selfintro\":{SelfIntroduction}}}";
+            return $"{{\"name\":\"{RealName}\"," +
+                   $"\"id\":\"{ID}\"," +
+                   $"\"posititon\":\"{Posititon}\"," +
+                   $"\"college\":\"{College}\"," +
+                   $"\"field\":\"{Field}\"," +
+                   $"\"achievement\":\"{Achievement}\"," +
+                   $"\"selfintro\":\"{SelfIntroduction}\"}}";
         }
     }
 

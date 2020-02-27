@@ -2,6 +2,7 @@ body{
     display: flex;
     justify-content: center;
     background-color: #fafafa;
+    font-family: Optima, "Lucida Sans", Calibri, Candara, Arial, source-han-serif-sc, "Source Han Serif SC", "Source Han Serif CN", "Source Han Serif TC", "Source Han Serif TW", "Source Han Serif", "Songti SC", "Microsoft YaHei", sans-serif;
 }
 .container{
     display:grid;
@@ -11,7 +12,6 @@ body{
     font-size: 20px;
     width: 100%;
     max-width: 900px;
-    font-family: Optima, "Lucida Sans", Calibri, Candara, Arial, source-han-serif-sc, "Source Han Serif SC", "Source Han Serif CN", "Source Han Serif TC", "Source Han Serif TW", "Source Han Serif", "Songti SC", "Microsoft YaHei", sans-serif;
 }
 .container input{
     font-size: 20px;
@@ -42,7 +42,13 @@ body{
     width: 120px;
     height: 150px;
     place-self: center right;
-    margin-right: 2px;
+    margin-right: 2px; 
+}
+.pic>#yourpic{
+    object-fit: cover;
+    object-position: center;
+    height: 150px;
+    width: 120px;
 }
 button.submit{
     place-self: center right;
@@ -94,18 +100,74 @@ button.submit{
     background-color: lightblue;
 }
 .tutors{
-    margin: 20px;
     font-size: 20px;
     width: 100%;
     max-width: 900px;
     display: flex;
     flex-direction: column;
-    
+    grid-column: 2/3;
+    border-left:2px black solid;
+}
+#tutor{
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+}
+.choosedTutor{
+    width: 33%;
+    position:fixed;
+    display: flex;
+    flex-direction: column;
+    max-width: 450px;
+}
+.choosedTutor>button{
+    align-self: center;
+    font-size: 22px;
+    width: 50%;
+}
+.choosedTutor>.tutor:first-child::before{
+    content: "第一志愿：";
+    font-weight: bold;
+    color: red;
+}
+.choosedTutor>.tutor+.tutor::before{
+    content: "第二志愿：";
+    font-weight: bold;
+    color: orange;
 }
 .tutor{
     white-space: pre-line;
     margin: 10px;
+    cursor: default;
 }
 .tutor+.tutor{
     border-top:1px black solid;
+}
+.tutor[choose='first']{
+    background-color: red;
+    order:1;
+}
+.tutor[choose='first']::before{
+    content: "第一志愿";
+}
+.tutor[choose='second']{
+    background-color: orange;
+    order:2;
+}
+.tutor[choose='second']::before{
+    content: "第二志愿";
+}
+.tutor .intro>span{
+    display: none;
+}
+.tutor .intro::before{
+    content:"个人介绍：……";
+}
+.tutor:hover .intro>span{
+    display: inline-block;
+}
+.tutor:hover .intro::before{
+    content:"个人介绍：";
+}
+.tutor:hover{
+    box-shadow: 4px 4px 0px black;
 }

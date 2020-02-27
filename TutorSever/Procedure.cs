@@ -42,6 +42,16 @@ namespace TutorSever
             }
         }
 
+        internal static ResponseMessage DownloadPic(RequsetMessage requset)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal static ResponseMessage UploadPic(RequsetMessage requset)
+        {
+            throw new NotImplementedException();
+        }
+
         internal static ResponseMessage UpdatePassword(RequsetMessage requset)
         {
             Dictionary<string, string> query = requset.UrlQuerys;
@@ -52,7 +62,9 @@ namespace TutorSever
                 string newpsw = query["newpsw"];
                 if (Authority.CheckToken(user, token))
                 {
-                    return DataBase.UpdatePassword(user, newpsw) ? new ResponseMessage("true") : new ResponseMessage("false");
+                    return DataBase.UpdatePassword(user, newpsw)
+                        ? new ResponseMessage("true")
+                        : new ResponseMessage("false");
                 }
                 else
                 {
@@ -117,7 +129,7 @@ namespace TutorSever
         }
 
         internal static ResponseMessage UpdateInformation(RequsetMessage requset)
-        { 
+        {
             throw new NotImplementedException();
         }
 
@@ -125,14 +137,14 @@ namespace TutorSever
         {
 
             Dictionary<string, string> query = requset.UrlQuerys;
-            if (query.ContainsKey("user") && query.ContainsKey("token"))
+            if (query.ContainsKey("user") && query.ContainsKey("token") && query.ContainsKey("type"))
             {
                 string token = query["token"];
                 string username = query["user"];
+                string type = query["type"];
                 if (Authority.CheckToken(username, token))
                 {
-
-                    throw new NotImplementedException();
+                    return new ResponseMessage(string.Join("\r\n", DataBase.GetTutorInformation(type)));
                 }
                 else
                 {

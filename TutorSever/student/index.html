@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>学生个人信息</title>
+    <title>学生：导师选择</title>
     <script type="text/javascript">
         load();
 
@@ -43,27 +43,28 @@
         <div class="sinf">
             <div class="name">
                 <label>姓名:</label>
-                <input v-model="inf.name" onchange="change()">
+                <input v-model="inf.name" readonly onchange="change()">
             </div>
             <div class="id">
                 <label>学号:</label>
-                <input v-model="inf.id" onchange="change()">
+                <input v-model="inf.id" readonly onchange="change()">
             </div>
             <div class="collage">
                 <label>学院:</label>
-                <input v-model="inf.college" onchange="change()">
+                <input v-model="inf.college" readonly onchange="change()">
             </div>
             <div class="major">
                 <label>专业:</label>
-                <input v-model="inf.major" onchange="change()">
+                <input v-model="inf.major" readonly onchange="change()">
             </div>
             <div class="tutorchoose">
                 <label>选择:</label>
                 <input v-model="inf.choose" readonly onclick="chooseTutor()" onchange="change()">
             </div>
         </div>
-        <div class="pic">
-            <image>照片</image>
+        <div class="pic" onclick="updownpic()">
+            <input type="file" id="fileElem" accept="image/*" style="display:none" onchange="pickPic(this.files[0])">
+            <image id="yourpic">照片</image>
         </div>
         <div class="intro">
             <label>个人介绍:</label>
@@ -74,16 +75,31 @@
         </button>
     </div>
     <div id="tutor" style="display: none;">
-        <div class="tutors">
-            <div v-for="t in tutors" class="tutor" onclick="Add(this)">
+        <div class="choosedTutor">
+            <div v-for="t in choosedTutor" class="tutor" choose="false" @click="outchoose(t)">
                 <div>姓名：{{t.name}}</div>
                 <div>学院：{{t.college}}</div>
                 <div>研究领域：{{t.field}}</div>
                 <div>职位：{{t.position}}</div>
                 <div>学术成就：
                     {{t.achievement}}</div>
-                <div>个人介绍：
-                    {{t.intro}}</div>
+                <div class="intro">
+                    <span>{{t.intro}}</span>
+                </div>
+            </div>
+            <button v-show="choosedTutor.length==2">确定</button>
+        </div>
+        <div class="tutors">
+            <div v-for="t in tutors" class="tutor" choose="false" @click="choose(t)">
+                <div>姓名：{{t.name}}</div>
+                <div>学院：{{t.college}}</div>
+                <div>研究领域：{{t.field}}</div>
+                <div>职位：{{t.position}}</div>
+                <div>学术成就：
+                    {{t.achievement}}</div>
+                <div class="intro">
+                    <span>{{t.intro}}</span>
+                </div>
             </div>
         </div>
     </div>

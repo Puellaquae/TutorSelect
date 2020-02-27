@@ -1,6 +1,5 @@
 ﻿using Puelloc;
 using System;
-using System.IO.Pipes;
 
 namespace TutorSever
 {
@@ -22,15 +21,18 @@ namespace TutorSever
                 setting.BasePath = @"F:\Administrator\Documents\code\TutorSelect\TutorSever";
             }
 
-            Pipe auth = new Pipe("GET","/Auth", Procedure.Auth);
+            Pipe auth = new Pipe("GET", "/Auth", Procedure.Auth);
             Pipe firstlogin = new Pipe("GET", "/FirstLogin", Procedure.IsFirstLogin);
-            Pipe updatePassword = new Pipe("GET" ,"/UpdatePassword",Procedure.UpdatePassword);
+            Pipe updatePassword = new Pipe("GET", "/UpdatePassword", Procedure.UpdatePassword);
             Pipe login = new Pipe("GET", "/Login", Procedure.Login);
             Pipe getInf = new Pipe("GET", "/Inf", Procedure.GetInformation);
-            Pipe updateInf = new Pipe("POST","/UpdateInf",Procedure.UpdateInformation);
-            Pipe getTutorInf=new Pipe("GET","/GetTutor",Procedure.GetTutorInformation);
-            HttpClient httpClient = new HttpClient(setting, 
-                auth, firstlogin, updatePassword, login, getInf, updateInf, getTutorInf);
+            Pipe updateInf = new Pipe("POST", "/UpdateInf", Procedure.UpdateInformation);
+            Pipe getTutorInf = new Pipe("GET", "/TutorInf", Procedure.GetTutorInformation);
+            Pipe uploadPic =new Pipe("PUT","/Pic",Procedure.UploadPic);
+            Pipe downloadPic =new Pipe("GET","/Pic",Procedure.DownloadPic);
+            HttpClient httpClient = new HttpClient(setting,
+                auth, firstlogin, updatePassword, login,
+                getInf, updateInf, getTutorInf,uploadPic,downloadPic);
             httpClient.Listen();
             Console.WriteLine(setting.BindIP.ToString());
             while (Console.ReadLine() != "shutdown")
