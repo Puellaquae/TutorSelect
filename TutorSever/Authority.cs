@@ -53,16 +53,16 @@ namespace TutorSever
         }
     }
 
-    internal static class Authority
+    internal class Authority
     {
-        private static int GetNewSeed()
+        private int GetNewSeed()
         {
             byte[] rndBytes = new byte[4];
             RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider();
             rng.GetBytes(rndBytes);
             return BitConverter.ToInt32(rndBytes, 0); 
         }
-        private static string GetRandomString(int len)
+        private string GetRandomString(int len)
         {
             string s = "123456789abcdefghijklmnpqrstuvwxyzABCDEFGHIJKLMNPQRSTUVWXYZ";
             string reValue = string.Empty;
@@ -74,18 +74,18 @@ namespace TutorSever
             }
             return reValue;
         }
-        private static bool _inited;
-        private static string _tokenGenKey;
-        public static void Init()
+
+        private readonly IDataBase _db;
+        private readonly string _tokenGenKey;
+        public Authority(IDataBase db)
         {
+            _db = db;
             _tokenGenKey = GetRandomString(16);
-            DataBase.Init();
-            _inited = true;
         }
         //private static Dictionary<string, string> Tokens = new Dictionary<string, string>();
-        public static string GetToken(string userName,string hmac,string type)
+        public string GetToken(string userName,string hmac,string type)
         {
-            if (DataBase.PassWordCheck(userName, hmac, type))
+            if (_db.PassWordCheck(userName, hmac, type))
             {
                 string token = TokenGen(userName);
                 //Tokens.Add(token, UserName);
@@ -97,7 +97,7 @@ namespace TutorSever
             }
         }
 
-        private static string GetMD5(string text)
+        private string GetMD5(string text)
         {
             using MD5 md5 = MD5.Create();
             byte[] source = Encoding.Default.GetBytes(text);
@@ -106,19 +106,15 @@ namespace TutorSever
             return result;
         }
 
-        private static string TokenGen(string userName)
+        private string TokenGen(string userName)
         {
-            if (_inited == false|| _tokenGenKey == null)
-            {
-                Init();
-            }
             string res = userName + DateTime.Today.ToString("d");
             string cry = AES.AESEncrypt(res, _tokenGenKey);
             return System.Web.HttpUtility.UrlEncode(cry);
         }
-        public static bool CheckToken(string userName,string token)
+        public bool CheckToken(string userName,string token)
         {
-            if (DataBase.HasAccount(userName))
+            if (_db.HasAccount(userName))
             {
                 switch (token.Length % 4)
                 {

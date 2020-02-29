@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>教师：学生选择</title>
+    <script type="text/javascript">
+        load();
+
+        function GetQueryString(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null) return unescape(r[2]);
+            return null;
+        }
+
+        function load() {
+            var _user = null;
+            if (!sessionStorage.getItem('token')) {
+                sessionStorage.setItem('token', GetQueryString('token'));
+            }
+            if (!sessionStorage.getItem('user')) {
+                sessionStorage.setItem('user', GetQueryString('user'));
+            } else {
+                _user = sessionStorage.getItem('user');
+            }
+            window.history.pushState(null, null, 'teacher/' + _user);
+        }
+    </script>
+    <link rel="stylesheet" href="../teacher/tea.css" />
+</head>
+
+<body>
+    <div id="choose" class="choose" style="display: none;">
+        <div>
+            <p>选择:</p>
+            <button onclick="choose('本科导师')">本科导师</button>
+            <button onclick="choose('毕业设计导师')">毕业设计导师</button>
+        </div>
+    </div>
+    <div id="app" class="container">
+        <div class="sinf">
+            <div class="name">
+                <label>姓名:</label>
+                <input v-model="inf.name" readonly onchange="change()">
+            </div>
+            <div class="position">
+                <label>职称:</label>
+                <input v-model="inf.position" readonly onchange="change()">
+            </div>
+            <div class="tutorchoose">
+                <label>类型:</label>
+                <input v-model="inf.group" readonly onclick="chooseTutor()" onchange="change()">
+            </div>
+            <div class="collage">
+                <label>所属学院:</label>
+                <input v-model="inf.college" readonly onchange="change()">
+            </div>
+            <div class="field">
+                <label>研究方向:</label>
+                <input v-model="inf.field" readonly onchange="change()">
+            </div>
+            
+        </div>
+        <div class="pic" onclick="updownpic()">
+            <input type="file" id="fileElem" accept="image/*" style="display:none" onchange="pickPic(this.files[0])">
+            <image id="yourpic">照片</image>
+        </div>
+        <div class="achievement">
+            <label>学术成就:</label>
+            <textarea v-model="inf.achievement" onchange="change()"></textarea>
+        </div>
+        <div class="intro">
+            <label>其他要求:</label>
+            <textarea v-model="inf.selfintro" onchange="change()"></textarea>
+        </div>
+        <button id="submitbtn" class="submit" onclick="infCheck()">
+            确认无误
+        </button>
+    </div>
+    <div id="tutor" style="display: none;">
+        <div class="Tblank"></div>
+        <div class="choosedTutor">
+            <div v-for="t in choosedTutor" class="tutor" choose="false" @click="outchoose(t)">
+                <div>姓名：{{t.name}}</div>
+                <div>学院：{{t.college}}</div>
+                <div>研究领域：{{t.field}}</div>
+                <div>职位：{{t.position}}</div>
+                <div>学术成就：
+                    {{t.achievement}}</div>
+                <div class="intro">
+                    <span>{{t.intro}}</span>
+                </div>
+            </div>
+            <button v-show="choosedTutor.length==2">确定</button>
+        </div>
+        <div class="tutors">
+            <div v-for="t in tutors" class="tutor" choose="false" @click="choose(t)">
+                <div>姓名：{{t.name}}</div>
+                <div>学院：{{t.college}}</div>
+                <div>研究领域：{{t.field}}</div>
+                <div>职位：{{t.position}}</div>
+                <div>学术成就：
+                    {{t.achievement}}</div>
+                <div class="intro">
+                    <span>{{t.intro}}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="../js/vue.js"></script>
+<script src="../teacher/tea.js"></script>
+
+</html>

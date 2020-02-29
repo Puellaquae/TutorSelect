@@ -7,8 +7,10 @@ namespace TutorSever
     {
         private static void Main()
         {
-            Authority.Init();
+            IDataBase dbBase=new DataBaseMemory();
+            Procedure proc = new Procedure(dbBase);
             Setting setting = new Setting();
+
             OperatingSystem osInfo = Environment.OSVersion;
             PlatformID platformID = osInfo.Platform;
             Console.WriteLine(osInfo.ToString());
@@ -21,20 +23,22 @@ namespace TutorSever
                 setting.BasePath = @"F:\Administrator\Documents\code\TutorSelect\TutorSever";
             }
 
-            Pipe auth = new Pipe("GET", "/Auth", Procedure.Auth);
-            Pipe firstlogin = new Pipe("GET", "/FirstLogin", Procedure.IsFirstLogin);
-            Pipe updatePassword = new Pipe("GET", "/UpdatePassword", Procedure.UpdatePassword);
-            Pipe login = new Pipe("GET", "/Login", Procedure.Login);
-            Pipe getInf = new Pipe("GET", "/Inf", Procedure.GetInformation);
-            Pipe updateInf = new Pipe("POST", "/UpdateInf", Procedure.UpdateInformation);
-            Pipe getTutorInf = new Pipe("GET", "/TutorInf", Procedure.GetTutorInformation);
-            Pipe uploadPic =new Pipe("PUT","/Pic",Procedure.UploadPic);
-            Pipe downloadPic =new Pipe("GET","/Pic",Procedure.DownloadPic);
+            Pipe auth = new Pipe("GET", "/Auth", proc.Auth);
+            Pipe firstlogin = new Pipe("GET", "/FirstLogin", proc.IsFirstLogin);
+            Pipe updatePassword = new Pipe("GET", "/UpdatePassword", proc.UpdatePassword);
+            Pipe login = new Pipe("GET", "/Login", proc.Login);
+            Pipe getInf = new Pipe("GET", "/Inf", proc.GetInformation);
+            Pipe updateInf = new Pipe("POST", "/UpdateInf", proc.UpdateInformation);
+            Pipe getTutorInf = new Pipe("GET", "/TutorInf", proc.GetTutorInformation);
+            Pipe uploadPic =new Pipe("PUT","/Pic",proc.UploadPic);
+            Pipe downloadPic =new Pipe("GET","/Pic",proc.DownloadPic);
+
             HttpClient httpClient = new HttpClient(setting,
                 auth, firstlogin, updatePassword, login,
                 getInf, updateInf, getTutorInf,uploadPic,downloadPic);
             httpClient.Listen();
             Console.WriteLine(setting.BindIP.ToString());
+
             while (Console.ReadLine() != "shutdown")
             {
             }

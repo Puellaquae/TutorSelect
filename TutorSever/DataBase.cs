@@ -4,16 +4,16 @@ using System.Linq;
 
 namespace TutorSever
 {
-    internal class DataBase
+    internal class DataBaseMemory:IDataBase
     {
-        private static readonly Dictionary<string, IAccount> Accounts = new Dictionary<string, IAccount>();
+        private readonly Dictionary<string, IAccount> _accounts = new Dictionary<string, IAccount>();
 
-        public static bool PassWordCheck(string userName, string hmac, string type)
+        public bool PassWordCheck(string userName, string hmac, string type)
         {
-            return Accounts[userName].HMAC == hmac && Accounts[userName].Type == type;
+            return _accounts[userName].HMAC == hmac && _accounts[userName].Type == type;
         }
 
-        public static void Init()
+        public DataBaseMemory()
         {
             Teacher teacher1 = new Teacher("123456", "30ce71a73bdd908c3955a90e8f7429ef")
             {
@@ -21,12 +21,12 @@ namespace TutorSever
                 ID = "T000001",
                 College = "计算机学院",
                 Field = "人工智能",
-                Posititon = "教授",
+                Position = "教授",
                 Achievement = "2020 No Award\r\nApplication of CNNs in Mahjong",
                 SelfIntroduction = "Hello World!",
                 Group = "all"
             };
-            Accounts.Add("123456", teacher1); //123456
+            _accounts.Add("123456", teacher1); //123456
             Student student1 = new Student("201906", "9551179bec1582a6e1617aac41ab7b0f")
             {
                 RealName = "李四",
@@ -35,17 +35,17 @@ namespace TutorSever
                 Major = "计算机科学与技术",
                 SelfIntroduction = "Dominae et Viri, I'm LiSi, LiSi is me."
             };
-            Accounts.Add("201906", student1); //987654
+            _accounts.Add("201906", student1); //987654
             Admin admin1 = new Admin("admin1", "8be5be290b6c848e30e72367d38aa47a")
             {
                 RealName = "王二麻子"
             };
-            Accounts.Add("admin1", admin1); //abc123
+            _accounts.Add("admin1", admin1); //abc123
         }
 
-        public static bool FirstLoginCheck(string userName)
+        public bool IsFirstLogin(string username)
         {
-            if (Accounts[userName] is Student a)
+            if (_accounts[username] is Student a)
             {
                 return a.IsFirstLogin;
             }
@@ -55,17 +55,17 @@ namespace TutorSever
             }
         }
 
-        public static bool HasAccount(string userName)
+        public bool HasAccount(string username)
         {
-            return Accounts.ContainsKey(userName);
+            return _accounts.ContainsKey(username);
         }
 
-        public static bool UpdatePassword(string username, string newpsw)
+        public bool UpdatePassword(string username, string newpsw)
         {
-            if (Accounts[username].HMAC != newpsw)
+            if (_accounts[username].HMAC != newpsw)
             {
-                Accounts[username].HMAC = newpsw;
-                if (Accounts[username] is Student a && a.IsFirstLogin)
+                _accounts[username].HMAC = newpsw;
+                if (_accounts[username] is Student a && a.IsFirstLogin)
                 {
                     a.IsFirstLogin = false;
                 }
@@ -78,25 +78,25 @@ namespace TutorSever
             }
         }
 
-        public static string GetType(string username)
+        public string GetType(string username)
         {
-            return Accounts[username].Type;
+            return _accounts[username].Type;
         }
 
-        public static string GetInformation(string username)
+        public string GetInformation(string username)
         {
-            return Accounts[username].GetInforamtion();
+            return _accounts[username].GetInforamtion();
         }
 
-        public static string[] GetTutorInformation(string tutorType)
+        public string[] GetTutorInformations(string tutortype)
         {
-            IEnumerable<string> query = from x in Accounts.Values
-                where x is Teacher a && (a.Group == tutorType || a.Group == "all")
+            IEnumerable<string> query = from x in _accounts.Values
+                where x is Teacher a && (a.Group == tutortype || a.Group == "all")
                 select x.GetInforamtion();
             return query.ToArray();
         }
 
-        public static void UpdateInformation(string username)
+        public bool UpdateInformation(string username,IAccount newinf)
         {
             throw new NotImplementedException();
         }

@@ -5,14 +5,13 @@ var app = new Vue({
             token: '',
             username: '',
             inf: {
-                name: '李四',
-                id: '20200202',
-                major: '计算机科学与技术',
+                name: '张三',
                 college: '计算机学院',
-                selfintro: "Dominae et Viri, I'm Li-Si, Li-Si is me.",
-                choose: '本科导师',
-                firsttutor: '',
-                secondtutor: ''
+                field: '人工智能',
+                position: '教授',
+                group:'',
+                achievement: '2020 Turing Award\r\nApplication of Convolutional Neural Networks in Multilateral Games with Asymmetric Information',
+                selfintro: 'Hello World!'
             }
         };
     },
@@ -20,14 +19,14 @@ var app = new Vue({
         this.username = sessionStorage.getItem('user');
         this.token = sessionStorage.getItem('token');
         fetch('../Inf?user=' + this.username + '&token=' + this.token).then(x => x.json()).then(x => this.inf = x);
-        if (this.inf.choose == '') {
+        if (this.inf.group == '') {
             document.getElementById('choose').style.display = 'flex';
         }
     },
 });
 
 function choose(num) {
-    app.inf.choose = num;
+    app.inf.group = num;
     document.getElementById('choose').style.display = 'none';
 }
 
@@ -37,9 +36,9 @@ function chooseTutor() {
 
 function infCheck() {
     //fetch
-    if (app.inf.choose == '本科导师') {
+    if (app.inf.group == '本科导师') {
         sessionStorage.setItem('type', 'under');
-    } else if (app.inf.choose == '毕业设计导师') {
+    } else if (app.inf.group == '毕业设计导师') {
         sessionStorage.setItem('type', 'project');
     }
     document.getElementById('app').style.display = 'none';
@@ -82,39 +81,6 @@ var tutor = new Vue({
             choosedTutor: [],
             tutors: [{
                     name: '张三',
-                    id: '',
-                    college: '计算机学院',
-                    field: '人工智能',
-                    position: '教授',
-                    achievement: '2020 Turing Award\r\nApplication of Convolutional Neural Networks in Multilateral Games with Asymmetric Information',
-                    intro: 'Hello World!'
-                },
-                {
-                    name: '赵六',
-                    id: '',
-                    college: '外国语学院',
-                    field: '线性文字A',
-                    position: '教授',
-                    achievement: 'A Syntactic Relation Between Linear A and Meadow Mari',
-                    intro: ''
-                }, {
-                    name: '张三2',
-                    id: '',
-                    college: '计算机学院',
-                    field: '人工智能',
-                    position: '教授',
-                    achievement: '2020 Turing Award\r\nApplication of Convolutional Neural Networks in Multilateral Games with Asymmetric Information',
-                    intro: 'Hello World!'
-                }, {
-                    name: '张三3',
-                    id: '',
-                    college: '计算机学院',
-                    field: '人工智能',
-                    position: '教授',
-                    achievement: '2020 Turing Award\r\nApplication of Convolutional Neural Networks in Multilateral Games with Asymmetric Information',
-                    intro: 'Hello World!'
-                }, {
-                    name: '张三4',
                     id: '',
                     college: '计算机学院',
                     field: '人工智能',
