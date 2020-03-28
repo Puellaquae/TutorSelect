@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 
 namespace TutorSever
@@ -99,6 +100,14 @@ namespace TutorSever
         public bool UpdateInformation(string username,IAccount newinf)
         {
             throw new NotImplementedException();
+        }
+
+        public bool UploadPhoto(string username, byte[] blob)
+        {
+            using var ms = new System.IO.MemoryStream(blob);
+            Bitmap img = new Bitmap(ms);
+            img.Save("D:\\test.bmp");
+            return true;
         }
     }
 }

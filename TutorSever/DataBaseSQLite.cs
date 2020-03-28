@@ -83,7 +83,22 @@ namespace TutorSever
 
         public string GetType(string username)
         {
-            throw new NotImplementedException();
+            using SQLiteConnection connection = new SQLiteConnection($"Data Source={_dbPath}");
+            connection.Open();
+            SQLiteCommand command = connection.CreateCommand();
+            command.CommandText =
+                @"
+                        SELECT $map FROM Student WHERE UserName = $user
+                ";
+            command.Parameters.AddWithValue("$user", username);
+            foreach(string x in new string[]{"Teacher","Student","Administrator" }){
+                command.Parameters.AddWithValue("$map",x);
+                using SQLiteDataReader reader = command.ExecuteReader();
+                if(reader.FieldCount != 0){
+                    return x;
+                } 
+            }
+            throw new Exception($"NOT FOUND ACCOUNT {username} IN GetType()");
         }
 
         public string GetInformation(string username)
@@ -97,6 +112,11 @@ namespace TutorSever
         }
 
         public bool UpdateInformation(string username, IAccount newinf)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool UploadPhoto(string username, byte[] blob)
         {
             throw new NotImplementedException();
         }

@@ -11,7 +11,7 @@ namespace TutorSever
         public Procedure(IDataBase db)
         {
             _db = db;
-            _auth=new Authority(db);
+            _auth = new Authority(db);
         }
 
         internal ResponseMessage Auth(RequsetMessage request)
@@ -57,7 +57,65 @@ namespace TutorSever
 
         internal ResponseMessage UploadPic(RequsetMessage requset)
         {
-            throw new NotImplementedException();
+            Dictionary<string, string> query = requset.UrlQuerys;
+            if (query.ContainsKey("user") && query.ContainsKey("token"))
+            {
+                string token = query["token"];
+                string username = query["user"];
+                if (_auth.CheckToken(username, token))
+                {
+
+                    if (_db.UploadPhoto(username,
+                        Convert.FromBase64String(
+                            requset.Text
+                            .Replace("data:image/png;base64,", "")
+                            .Replace("data:image/jgp;base64,", "")
+                            .Replace("data:image/jpg;base64,", "")
+                            .Replace("data:image/jpeg;base64,", ""))))
+                    {
+                        return new ResponseMessage(200);
+                    }
+                    else
+                    {
+                        return new ResponseMessage(500);
+                    }
+                }
+                else
+                {
+                    return new ResponseMessage(403);
+                }
+            }
+            else
+            {
+                return new ResponseMessage(400);
+            }
+        }
+
+        internal ResponseMessage TESTUploadPic(RequsetMessage requset)
+        {
+            Dictionary<string, string> query = requset.UrlQuerys;
+            if (query.ContainsKey("user"))
+            {
+                string username = query["user"];
+                if (_db.UploadPhoto(username,
+                    Convert.FromBase64String(
+                            requset.Text
+                            .Replace("data:image/png;base64,", "")
+                            .Replace("data:image/jgp;base64,", "")
+                            .Replace("data:image/jpg;base64,", "")
+                            .Replace("data:image/jpeg;base64,", ""))))
+                {
+                    return new ResponseMessage(200);
+                }
+                else
+                {
+                    return new ResponseMessage(500);
+                }
+            }
+            else
+            {
+                return new ResponseMessage(400);
+            }
         }
 
         internal ResponseMessage UpdatePassword(RequsetMessage requset)
@@ -152,7 +210,7 @@ namespace TutorSever
                 string type = query["type"];
                 if (_auth.CheckToken(username, token))
                 {
-                    return new ResponseMessage("{["+string.Join(",", _db.GetTutorInformations(type))+"]}");
+                    return new ResponseMessage("{[" + string.Join(",", _db.GetTutorInformations(type)) + "]}");
                 }
                 else
                 {

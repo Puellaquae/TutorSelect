@@ -10,5 +10,6 @@
         string GetInformation(string username);
         string[] GetTutorInformations(string tutortype);
         bool UpdateInformation(string username, IAccount newinf);
+        bool UploadPhoto(string username, byte[] blob);
     }
 }

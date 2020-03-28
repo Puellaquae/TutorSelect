@@ -31,11 +31,12 @@ namespace TutorSever
             Pipe updateInf = new Pipe("POST", "/UpdateInf", proc.UpdateInformation);
             Pipe getTutorInf = new Pipe("GET", "/TutorInf", proc.GetTutorInformation);
             Pipe uploadPic =new Pipe("PUT","/Pic",proc.UploadPic);
+            Pipe _TESTuploadPic =new Pipe("PUT","/testPic",proc.TESTUploadPic);
             Pipe downloadPic =new Pipe("GET","/Pic",proc.DownloadPic);
 
             HttpClient httpClient = new HttpClient(setting,
                 auth, firstlogin, updatePassword, login,
-                getInf, updateInf, getTutorInf,uploadPic,downloadPic);
+                getInf, updateInf, getTutorInf, uploadPic, downloadPic, _TESTuploadPic);
             httpClient.Listen();
             Console.WriteLine(setting.BindIP.ToString());
 

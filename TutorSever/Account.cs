@@ -75,7 +75,7 @@ namespace TutorSever
             set => _information.Grade = value;
         }
 
-        public string Type => "student";
+        public string Type => "Student";
 
         public string TutorType
         {
@@ -196,7 +196,7 @@ namespace TutorSever
         }
 
         public string HMAC { get; set; }
-        public string Type => "teacher";
+        public string Type => "Teacher";
         private Inf _information = new Inf();
 
         public class Inf
@@ -234,7 +234,7 @@ namespace TutorSever
         }
         public string HMAC { get; set; }
         public string Permission { get; set; }
-        public string Type => "admin";
+        public string Type => "Administrator";
         private Inf _information=new Inf();
         public Admin(string userName, string hmac)
         {
